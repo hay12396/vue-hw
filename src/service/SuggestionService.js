@@ -5,9 +5,20 @@ const suggestions = [
   "Thanks again for chatting today and i look forward to hearing from you!"
 ];
 
+const THRESHOLD_TO_SHOW_SUGGESTION = 0.4;
+
 export default {
   getSuggestionsFor(value) {
-    const relevantSuggestions = suggestions.filter(s => s.startsWith(value));
-    return relevantSuggestions.length > 0 ? relevantSuggestions[0] : "";
+    var textWithNBSpaceReplaced = value.replace(/&nbsp;/g, ' ');
+    if (textWithNBSpaceReplaced.length === 0) return "";
+
+    const relevantSuggestions = suggestions.filter(s => s.startsWith(textWithNBSpaceReplaced));
+    for (let i = 0; i < relevantSuggestions.length; i++) {
+      const suggestion = relevantSuggestions[i];
+      if (textWithNBSpaceReplaced.length / suggestion.length >= THRESHOLD_TO_SHOW_SUGGESTION)
+        return suggestion;
+    }
+
+    return "";
   }
 }
