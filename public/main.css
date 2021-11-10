@@ -4,4 +4,9 @@
   top: 1.4rem;
   left: 1rem;
   user-select: none;
+  height: 20px;
+  z-index: 12;
+  direction: ltr;
+  font: small/ 1.5 Arial, Helvetica, sans-serif;
+  letter-spacing: normal;
 }

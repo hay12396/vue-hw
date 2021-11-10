@@ -81,6 +81,9 @@ export default {
       suggestionsDiv.value.style.height = editableLocation.height + "px";
       suggestionsDiv.value.style.fontWeight = editable.style.fontWeight;
       suggestionsDiv.value.style.fontSize = editable.style.fontSize;
+      suggestionsDiv.value.style.font = editable.style.font;
+      suggestionsDiv.value.style.letterSpacing = editable.style.letterSpacing;
+      editable.style.direction = "ltr !important";
     });
 
     onBeforeUnmount(() => {
