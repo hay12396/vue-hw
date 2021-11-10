@@ -2,7 +2,7 @@
 
 <template>
   <div class="wrapper">
-    <div id="suggestions" class="suggestions" ref="suggestionsDiv" />
+    <div id="hay-suggestions" ref="suggestionsDiv" />
   </div>
 </template>
 
@@ -17,11 +17,13 @@ export default {
     const suggestionsDiv = ref(null);
 
     const getEditableDiv = () => {
+      console.log('document.querySelectorAll("div[contenteditable]"): ', document.querySelectorAll("div[contenteditable]"))
       return document.querySelectorAll("div[contenteditable]")[0];
     };
 
     const valueChanged = e => {
-      const value = e.target.innerHTML;
+      const value = e.target.innerText;
+      console.log('valueChanged: ', value)
       const suggestion = SuggestionService.getSuggestionsFor(value);
       if (suggestion) {
         suggestionsDiv.value.innerHTML = suggestion;
@@ -66,6 +68,7 @@ export default {
     };
 
     onMounted(() => {
+      alert('onMounted')
       suggestionsDiv.value.addEventListener("click", refocus);
 
       const editable = getEditableDiv();
@@ -81,6 +84,7 @@ export default {
     });
 
     onBeforeUnmount(() => {
+      alert('onBeforeUnmount')
       suggestionsDiv.value.removeEventListener("click", refocus);
       const editable = getEditableDiv();
       editable.removeEventListener("input", valueChanged);
@@ -91,14 +95,3 @@ export default {
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.suggestions {
-  opacity: 0.5;
-  position: fixed;
-  top: calc(var(--padding) + 0.4rem);
-  left: var(--padding);
-  user-select: none;
-}
-</style>

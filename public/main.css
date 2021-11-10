@@ -1,0 +1,7 @@
+#hay-suggestions {
+  opacity: 0.5;
+  position: fixed;
+  top: 1.4rem;
+  left: 1rem;
+  user-select: none;
+}
