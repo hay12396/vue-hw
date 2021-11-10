@@ -2,7 +2,6 @@
 
 <template>
   <div class="wrapper">
-    <div id="content-editable" contenteditable="true" />
     <div id="suggestions" class="suggestions" ref="suggestionsDiv" />
   </div>
 </template>
@@ -18,7 +17,7 @@ export default {
     const suggestionsDiv = ref(null);
 
     const getEditableDiv = () => {
-      return document.getElementById("content-editable");
+      return document.querySelectorAll("div[contenteditable]")[0];
     };
 
     const valueChanged = e => {
@@ -95,14 +94,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper {
-  --padding: 1rem;
-  position: relative;
-  text-align: left;
-  border: 1px solid black;
-  padding: var(--padding);
-}
-
 .suggestions {
   opacity: 0.5;
   position: fixed;
