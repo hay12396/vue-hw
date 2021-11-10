@@ -9,7 +9,7 @@ const THRESHOLD_TO_SHOW_SUGGESTION = 0.4;
 
 export default {
   getSuggestionsFor(value) {
-    var textWithNBSpaceReplaced = value.replace(/&nbsp;/g, ' ');
+    var textWithNBSpaceReplaced = this.removeNewlines(value);
     if (textWithNBSpaceReplaced.length === 0) return "";
 
     const relevantSuggestions = suggestions.filter(s => s.startsWith(textWithNBSpaceReplaced));
@@ -20,5 +20,11 @@ export default {
     }
 
     return "";
+  },
+  removeNewlines(str) {
+    str = str.replace(/\s{2,}/g, ' ');
+    str = str.replace(/\t/g, ' ');
+    str = str.toString().trim().replace(/(\r\n|\n|\r)/g, "");
+    return str
   }
 }

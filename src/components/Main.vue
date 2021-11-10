@@ -2,8 +2,7 @@
 
 <template>
   <div class="wrapper">
-    <div id="content-editable" contenteditable="true" />
-    <div id="suggestions" class="suggestions" ref="suggestionsDiv" />
+    <div id="hay-suggestions" ref="suggestionsDiv" />
   </div>
 </template>
 
@@ -18,11 +17,11 @@ export default {
     const suggestionsDiv = ref(null);
 
     const getEditableDiv = () => {
-      return document.getElementById("content-editable");
+      return document.querySelectorAll("div[contenteditable]")[0];
     };
 
     const valueChanged = e => {
-      const value = e.target.innerHTML;
+      const value = e.target.innerText;
       const suggestion = SuggestionService.getSuggestionsFor(value);
       if (suggestion) {
         suggestionsDiv.value.innerHTML = suggestion;
@@ -43,6 +42,7 @@ export default {
         editable.innerHTML = suggestionsDiv.value.innerHTML;
         placeCaretAtEnd(editable);
         suggestionsDiv.value.innerHTML = "";
+        editable.style.direction = "ltr";
       }
     };
 
@@ -66,10 +66,16 @@ export default {
       }
     };
 
-    onMounted(() => {
-      suggestionsDiv.value.addEventListener("click", refocus);
-
+    const handleMount = () => {
       const editable = getEditableDiv();
+      if (editable == null) {
+        setTimeout(() => {
+          handleMount();
+        }, 500);
+        return;
+      }
+
+      suggestionsDiv.value.addEventListener("click", refocus);
       editable.addEventListener("input", valueChanged);
       editable.addEventListener("keydown", buttonClicked);
 
@@ -79,9 +85,17 @@ export default {
       suggestionsDiv.value.style.height = editableLocation.height + "px";
       suggestionsDiv.value.style.fontWeight = editable.style.fontWeight;
       suggestionsDiv.value.style.fontSize = editable.style.fontSize;
+      suggestionsDiv.value.style.font = editable.style.font;
+      suggestionsDiv.value.style.letterSpacing = editable.style.letterSpacing;
+      editable.style.direction = "ltr";
+    };
+
+    onMounted(() => {
+      handleMount();
     });
 
     onBeforeUnmount(() => {
+      alert("onBeforeUnmount");
       suggestionsDiv.value.removeEventListener("click", refocus);
       const editable = getEditableDiv();
       editable.removeEventListener("input", valueChanged);
@@ -92,22 +106,3 @@ export default {
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-.wrapper {
-  --padding: 1rem;
-  position: relative;
-  text-align: left;
-  border: 1px solid black;
-  padding: var(--padding);
-}
-
-.suggestions {
-  opacity: 0.5;
-  position: fixed;
-  top: calc(var(--padding) + 0.4rem);
-  left: var(--padding);
-  user-select: none;
-}
-</style>
